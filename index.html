@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Untold Archive — Каталог французской классической литературы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F7F4;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #EFECE6;
+      --text-ink: #141413;
+      --text-muted: #57534E;
+      --border-hairline: #E4E0D8;
+      --accent-lapis: #1B365D;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-paper);
+      color: var(--text-ink);
+      font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(248, 247, 244, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-ink);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .header-stats {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 66ch;
+      margin: 0 0 28px;
+    }
+
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .toc-nav a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-ink);
+      text-decoration: none;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .toc-nav a:hover {
+      color: var(--accent-lapis);
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .catalog-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 72ch;
+    }
+
+    .section-kicker {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-lapis);
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.35rem);
+      font-weight: 600;
+      margin: 0 0 10px;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .authors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    .author-card,
+    .author-details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      padding: 24px;
+    }
+
+    .author-details { padding: 0; }
+
+    .author-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .author-details[open] .author-summary {
+      border-bottom-color: var(--border-hairline);
+    }
+
+    .author-summary::-webkit-details-marker { display: none; }
+
+    .author-heading strong {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .author-years, .tabular {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-body { padding: 18px 24px 24px; }
+
+    .author-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .author-name {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      line-height: 1.2;
+    }
+
+    .author-role {
+      margin: 0;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .author-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .author-bio {
+      margin: 0 0 18px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .works-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .work-item {
+      padding: 12px 0;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .work-item:target {
+      background: rgba(27, 54, 93, 0.05);
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    .work-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .work-code {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .work-link {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent-lapis);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(27, 54, 93, 0.28);
+      transition: border-color 0.15s ease;
+    }
+
+    .work-link:hover {
+      border-bottom-color: var(--accent-lapis);
+    }
+
+    .work-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .work-summary {
+      margin: 6px 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .site-footer {
+      padding: 36px 0 48px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .authors-grid { grid-template-columns: 1fr; }
+      .work-meta { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#">Untold Archive</a>
+      <div class="header-stats">6 разделов · 20 писателей · 41 произведений</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="hero-kicker">Литературный архив · Сводный указатель</p>
+      <h1 class="hero-title">Каталог французской классической литературы</h1>
+      <p class="hero-lead">
+        Систематизированное собрание на русском языке в трёх уровнях: эпохи и литературные разделы Франции от Просвещения до экзистенциализма, великие писатели и их главные произведения.
+      </p>
+      <nav class="toc-nav" aria-label="Разделы каталога">
+        <a href="#fr-enlightenment">Раздел I: Эпоха Просвещения и галантный век</a>
+        <a href="#fr-romanticism">Раздел II: Романтизм и исторический эпос</a>
+        <a href="#fr-realism">Раздел III: Великий французский реализм</a>
+        <a href="#fr-naturalism-novella">Раздел IV: Натурализм и искусство новеллы</a>
+        <a href="#fr-symbolism-poetry">Раздел V: Символизм и поэзия нового времени</a>
+        <a href="#fr-twentieth-century">Раздел VI: Модернизм, экзистенциализм и XX век</a>
+      </nav>
+    </section>
+
+    
+      <section class="catalog-section" id="fr-enlightenment">
+        <div class="section-header">
+          <p class="section-kicker">Раздел I · 1664–1782 годы</p>
+          <h2 class="section-title">Эпоха Просвещения и галантный век</h2>
+          <p class="section-desc">Классицизм французской сцены, философская повесть Просвещения, сентиментальный эпистолярный роман и блестящий психологический анализ нравов.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-moliere">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Мольер (Жан-Батист Поклен)</h3>
+                  <p class="author-role">Создатель классической французской комедии · <span class="tabular">1622–1673</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Великий драматург и актёр, соединивший традиции народного фарса с высокой сатирой на лицемерие, тщеславие и сословные предрассудки.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tartuffe">
+                  <div class="work-row">
+                    <span class="work-code">ФР-01.01</span>
+                    <a class="work-link" href="./works/moliere-tartuffe.html">Тартюф, или Обманщик</a>
+                    <span class="work-meta">1664 · Комедия в стихах</span>
+                  </div>
+                  <p class="work-summary">Остросатирическая пьеса о ханже и авантюристе Тартюфе, втёршемся в доверие к богатому парижанину Оргону под маской набожности.</p>
+                </li>
+                <li class="work-item" id="work-le-bourgeois-gentilhomme">
+                  <div class="work-row">
+                    <span class="work-code">ФР-01.02</span>
+                    <a class="work-link" href="./works/moliere-bourgeois-gentilhomme.html">Мещанин во дворянстве</a>
+                    <span class="work-meta">1670 · Комедия-балет</span>
+                  </div>
+                  <p class="work-summary">История тщеславного буржуа господина Журдена, мечтающего любой ценой стать аристократом и с удивлением узнающего, что всю жизнь говорил прозой.</p>
+                </li>
+                <li class="work-item" id="work-dom-juan">
+                  <div class="work-row">
+                    <span class="work-code">ФР-01.03</span>
+                    <a class="work-link" href="./works/moliere-dom-juan.html">Дон Жуан, или Каменный пир</a>
+                    <span class="work-meta">1665 · Комедия</span>
+                  </div>
+                  <p class="work-summary">Философская драма о вольнодумце и обольстителе Дон Жуане, бросающем вызов и общественной морали, и самому Небу.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-voltaire">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Вольтер (Франсуа-Мари Аруэ)</h3>
+                  <p class="author-role">Философ, поэт и мастер иронической повести · <span class="tabular">1694–1778</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Один из главных умов европейского Просвещения, создатель жанра философской повести, высмеивающей фанатизм и догматизм.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-candide">
+                  <div class="work-row">
+                    <span class="work-code">ФР-01.04</span>
+                    <a class="work-link" href="./works/voltaire-candide.html">Кандид, или Оптимизм</a>
+                    <span class="work-meta">1759 · Философская повесть</span>
+                  </div>
+                  <p class="work-summary">Стремительные злоключения простодушного юноши Кандида и его наставника Панглоса по всему миру, завершающиеся знаменитым заветом: «надо возделывать свой сад».</p>
+                </li>
+                <li class="work-item" id="work-lingenu">
+                  <div class="work-row">
+                    <span class="work-code">ФР-01.05</span>
+                    <a class="work-link" href="./works/voltaire-lingenu.html">Простодушный</a>
+                    <span class="work-meta">1767 · Философская повесть</span>
+                  </div>
+                  <p class="work-summary">История гурона, оказавшегося во Франции эпохи Людовика XIV и проверяющего условности цивилизации глазами «естественного человека».</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rousseau">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жан-Жак Руссо</h3>
+                  <p class="author-role">Мыслитель и предтеча европейского романтизма · <span class="tabular">1712–1778</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Философ и писатель, открывший литературе ценность искреннего чувства, природы и глубокой личной исповеди.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-nouvelle-heloise">
+                  <div class="work-row">
+                    <span class="work-code">ФР-01.06</span>
+                    <a class="work-link" href="./works/rousseau-nouvelle-heloise.html">Юлия, или Новая Элоиза</a>
+                    <span class="work-meta">1761 · Роман в письмах</span>
+                  </div>
+                  <p class="work-summary">Самый читаемый сентиментальный роман XVIII века — о возвышенной любви Юлии д’Этанж и Сен-Пре на берегах Женевского озера.</p>
+                </li>
+                <li class="work-item" id="work-confessions">
+                  <div class="work-row">
+                    <span class="work-code">ФР-01.07</span>
+                    <a class="work-link" href="./works/rousseau-confessions.html">Исповедь</a>
+                    <span class="work-meta">1782 · Автобиография</span>
+                  </div>
+                  <p class="work-summary">Откровенная автобиографическая книга, впервые поставившая в центр литературы внутреннюю жизнь обычного человека без прикрас.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-laclos">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Пьер Шодерло де Лакло</h3>
+                  <p class="author-role">Мастер эпистолярного психологического романа · <span class="tabular">1741–1803</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Артиллерийский офицер и писатель, создавший один из самых изощрённых и безжалостных романов об интригах аристократического света.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-liaisons-dangereuses">
+                  <div class="work-row">
+                    <span class="work-code">ФР-01.08</span>
+                    <a class="work-link" href="./works/laclos-liaisons-dangereuses.html">Опасные связи</a>
+                    <span class="work-meta">1782 · Эпистолярный роман</span>
+                  </div>
+                  <p class="work-summary">Холодная дуэль умов виконта де Вальмона и маркизы де Мертей, превращающих чужую любовь и судьбы в изысканную шахматную игру.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fr-romanticism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел II · 1829–1869 годы</p>
+          <h2 class="section-title">Романтизм и исторический эпос</h2>
+          <p class="section-desc">Грандиозные исторические полотна, бунт сильных страстей, благородное приключение и гуманистический пафос французского романтизма.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-hugo">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Виктор Мари Гюго</h3>
+                  <p class="author-role">Глава французского романтизма и романист-гуманист · <span class="tabular">1802–1885</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Поэт, драматург и романист, соединивший масштаб исторического эпоса с защитой униженных и верой в силу милосердия.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-les-miserables">
+                  <div class="work-row">
+                    <span class="work-code">ФР-02.01</span>
+                    <a class="work-link" href="./works/hugo-otverzhennye.html">Отверженные</a>
+                    <span class="work-meta">1862 · Роман-эпопея</span>
+                  </div>
+                  <p class="work-summary">Монументальная панорама Франции XIX века: судьба бывшего каторжника Жана Вальжана, инспектора Жавера, Фантины и Козетты.</p>
+                </li>
+                <li class="work-item" id="work-notre-dame-de-paris">
+                  <div class="work-row">
+                    <span class="work-code">ФР-02.02</span>
+                    <a class="work-link" href="./works/hugo-sobor-parizhskoy-bogomateri.html">Собор Парижской Богоматери</a>
+                    <span class="work-meta">1831 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Средневековый Париж XV века и трагическая история цыганки Эсмеральды, звонаря Квазимодо и архидиакона Клода Фролло.</p>
+                </li>
+                <li class="work-item" id="work-lhomme-qui-rit">
+                  <div class="work-row">
+                    <span class="work-code">ФР-02.03</span>
+                    <a class="work-link" href="./works/hugo-chelovek-kotory-smeetsya.html">Человек, который смеётся</a>
+                    <span class="work-meta">1869 · Роман</span>
+                  </div>
+                  <p class="work-summary">История Гуинплена, обезображенного в детстве и сохранившего благородство души в контрасте с блеском и жестокостью английской знати.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-dumas">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Александр Дюма (отец)</h3>
+                  <p class="author-role">Мастер приключенческого и исторического романа · <span class="tabular">1802–1870</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Один из самых увлекательных рассказчиков мировой литературы, ожививший историю Франции в судьбах мушкетёров и мстителей.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-monte-cristo">
+                  <div class="work-row">
+                    <span class="work-code">ФР-02.04</span>
+                    <a class="work-link" href="./works/dumas-graf-monte-kristo.html">Граф Монте-Кристо</a>
+                    <span class="work-meta">1844 · Приключенческий роман</span>
+                  </div>
+                  <p class="work-summary">История Эдмона Дантеса, несправедливо заточённого в замке Иф, обретшего несметные сокровища и вернувшегося в Париж вершителем правосудия.</p>
+                </li>
+                <li class="work-item" id="work-trois-mousquetaires">
+                  <div class="work-row">
+                    <span class="work-code">ФР-02.05</span>
+                    <a class="work-link" href="./works/dumas-tri-mushketera.html">Три мушкетёра</a>
+                    <span class="work-meta">1844 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Приключения молодого гасконца д’Артаньяна и его неразлучных друзей Атоса, Портоса и Арамиса при дворе Людовика XIII и кардинала Ришелье.</p>
+                </li>
+                <li class="work-item" id="work-reine-margot">
+                  <div class="work-row">
+                    <span class="work-code">ФР-02.06</span>
+                    <a class="work-link" href="./works/dumas-koroleva-margo.html">Королева Марго</a>
+                    <span class="work-meta">1845 · Исторический роман</span>
+                  </div>
+                  <p class="work-summary">Любовь, государственные интриги и кровавая драма Варфоломеевской ночи на фоне последних лет династии Валуа.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-merimee">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Проспер Мериме</h3>
+                  <p class="author-role">Мастер лаконичной новеллы и экзотического колорита · <span class="tabular">1803–1870</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель-стилист, соединивший романтические страсти Испании и Корсики со сдержанной точностью классического слога.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-carmen">
+                  <div class="work-row">
+                    <span class="work-code">ФР-02.07</span>
+                    <a class="work-link" href="./works/merimee-carmen.html">Кармен</a>
+                    <span class="work-meta">1845 · Новелла</span>
+                  </div>
+                  <p class="work-summary">Страстная и роковая история любви солдата Хосе к вольнолюбивой цыганке Кармен на дорогах Андалусии.</p>
+                </li>
+                <li class="work-item" id="work-mateo-falcone">
+                  <div class="work-row">
+                    <span class="work-code">ФР-02.08</span>
+                    <a class="work-link" href="./works/merimee-mateo-falcone.html">Маттео Фальконе</a>
+                    <span class="work-meta">1829 · Новелла</span>
+                  </div>
+                  <p class="work-summary">Суровая корсиканская новелла о нерушимом законе гостеприимства и беспощадной отцовской чести.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fr-realism">
+        <div class="section-header">
+          <p class="section-kicker">Раздел III · 1830–1870-е годы</p>
+          <h2 class="section-title">Великий французский реализм</h2>
+          <p class="section-desc">Энциклопедия нравов буржуазного общества, «Человеческая комедия», психология честолюбия и безупречная проза стиля.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-balzac">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Оноре де Бальзак</h3>
+                  <p class="author-role">Создатель эпопеи «Человеческая комедия» · <span class="tabular">1799–1850</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Титанический летописец Франции после Реставрации, показавший власть денег, страстей и социальных механизмов в десятках связанных романов.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-pere-goriot">
+                  <div class="work-row">
+                    <span class="work-code">ФР-03.01</span>
+                    <a class="work-link" href="./works/balzac-otec-gorio.html">Отец Горио</a>
+                    <span class="work-meta">1835 · Роман</span>
+                  </div>
+                  <p class="work-summary">Трагедия беззаветной отцовской любви старика Горио и первые шаги амбициозного студента Эжена де Растиньяка в парижском пансионе Воке.</p>
+                </li>
+                <li class="work-item" id="work-peau-de-chagrin">
+                  <div class="work-row">
+                    <span class="work-code">ФР-03.02</span>
+                    <a class="work-link" href="./works/balzac-shagrenevaya-kozha.html">Шагреневая кожа</a>
+                    <span class="work-meta">1831 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Притча о талисмане, исполняющем любые желания Рафаэля де Валантена ценой сокращения его собственной жизни.</p>
+                </li>
+                <li class="work-item" id="work-illusions-perdues">
+                  <div class="work-row">
+                    <span class="work-code">ФР-03.03</span>
+                    <a class="work-link" href="./works/balzac-utrachennye-illyuzii.html">Утраченные иллюзии</a>
+                    <span class="work-meta">1843 · Роман</span>
+                  </div>
+                  <p class="work-summary">Путь провинциального поэта Люсьена де Рюбампре в мир парижской журналистики, театра и продажной славы.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-stendhal">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Стендаль (Анри-Мари Бейль)</h3>
+                  <p class="author-role">Первооткрыватель тонкой психологии честолюбия · <span class="tabular">1783–1842</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Романист и знаток человеческих страстей, соединивший сухую ясность кодекса с романтической энергией наполеоновской эпохи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-le-rouge-et-le-noir">
+                  <div class="work-row">
+                    <span class="work-code">ФР-03.04</span>
+                    <a class="work-link" href="./works/stendhal-krasnoe-i-chernoe.html">Красное и чёрное</a>
+                    <span class="work-meta">1830 · Психологический роман</span>
+                  </div>
+                  <p class="work-summary">Хроника восхождения и гибели Жюльена Сореля — одарённого юноши низкого происхождения, выбирающего между мечтой о славе и карьерой.</p>
+                </li>
+                <li class="work-item" id="work-chartreuse-de-parme">
+                  <div class="work-row">
+                    <span class="work-code">ФР-03.05</span>
+                    <a class="work-link" href="./works/stendhal-parmskaya-obitel.html">Пармская обитель</a>
+                    <span class="work-meta">1839 · Роман</span>
+                  </div>
+                  <p class="work-summary">Жизнь молодого итальянского аристократа Фабрицио дель Донго: битва при Ватерлоо, придворные интриги Пармы и возвышенная любовь.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-flaubert">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Гюстав Флобер</h3>
+                  <p class="author-role">Мастер безупречной формы и «объективного стиля» · <span class="tabular">1821–1880</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель, оттачивавший каждую фразу до музыкального совершенства и показавший драму романтических иллюзий в столкновении с пошлостью будней.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-madame-bovary">
+                  <div class="work-row">
+                    <span class="work-code">ФР-03.06</span>
+                    <a class="work-link" href="./works/flaubert-gospozha-bovari.html">Госпожа Бовари</a>
+                    <span class="work-meta">1856 · Роман</span>
+                  </div>
+                  <p class="work-summary">История Эммы Бовари, чьи книжные мечты о возвышенной любви разбиваются о тихую рутину нормандской провинции.</p>
+                </li>
+                <li class="work-item" id="work-education-sentimentale">
+                  <div class="work-row">
+                    <span class="work-code">ФР-03.07</span>
+                    <a class="work-link" href="./works/flaubert-vospitanie-chuvstv.html">Воспитание чувств</a>
+                    <span class="work-meta">1869 · Роман</span>
+                  </div>
+                  <p class="work-summary">История молодого человека Фредерика Моро, его безответной любви к госпоже Арну и угасания надежд поколения 1848 года.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fr-naturalism-novella">
+        <div class="section-header">
+          <p class="section-kicker">Раздел IV · 1869–1893 годы</p>
+          <h2 class="section-title">Натурализм и искусство новеллы</h2>
+          <p class="section-desc">Социальная фреска индустриальной эпохи в циклах Золя и эталонные по сжатости и выразительности рассказы и романы Мопассана.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-zola">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Эмиль Золя</h3>
+                  <p class="author-role">Глава французского натурализма и автор «Ругон-Маккаров» · <span class="tabular">1840–1902</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Создатель двадцатитомной семейной хроники Второй империи, исследовавший труд, среду, толпу и городскую жизнь с документальной мощью.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-germinal">
+                  <div class="work-row">
+                    <span class="work-code">ФР-04.01</span>
+                    <a class="work-link" href="./works/zola-zherminal.html">Жерминаль</a>
+                    <span class="work-meta">1885 · Социальный роман</span>
+                  </div>
+                  <p class="work-summary">Суровая эпопея о жизни и забастовке шахтёров северной Франции и вере в пробуждение человеческого достоинства.</p>
+                </li>
+                <li class="work-item" id="work-au-bonheur-des-dames">
+                  <div class="work-row">
+                    <span class="work-code">ФР-04.02</span>
+                    <a class="work-link" href="./works/zola-damskoe-schastye.html">Дамское счастье</a>
+                    <span class="work-meta">1883 · Роман</span>
+                  </div>
+                  <p class="work-summary">История рождения гигантского парижского универмага и судьбы скромной продавщицы Денизы Бодю.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-maupassant">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Ги де Мопассан</h3>
+                  <p class="author-role">Мастер короткого рассказа и психологического романа · <span class="tabular">1850–1893</span></p>
+                </div>
+                <span class="author-count">3 произв.</span>
+              </header>
+              <p class="author-bio">Ученик Флобера, прославившийся кристальной ясностью прозы, иронией и проницательным взглядом на человеческие слабости.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-bel-ami">
+                  <div class="work-row">
+                    <span class="work-code">ФР-04.03</span>
+                    <a class="work-link" href="./works/maupassant-mily-drug.html">Милый друг</a>
+                    <span class="work-meta">1885 · Роман</span>
+                  </div>
+                  <p class="work-summary">Стремительная карьера циничного красавца Жоржа Дюруа в парижской прессе, финансах и высшем свете Третьей республики.</p>
+                </li>
+                <li class="work-item" id="work-boule-de-suif">
+                  <div class="work-row">
+                    <span class="work-code">ФР-04.04</span>
+                    <a class="work-link" href="./works/maupassant-pyshka.html">Пышка</a>
+                    <span class="work-meta">1880 · Новелла</span>
+                  </div>
+                  <p class="work-summary">Острая новелла о дилижансе с почтенными буржуа и куртизанкой Пышкой, обнажающая лицемерие благопристойного общества.</p>
+                </li>
+                <li class="work-item" id="work-une-vie">
+                  <div class="work-row">
+                    <span class="work-code">ФР-04.05</span>
+                    <a class="work-link" href="./works/maupassant-zhizn.html">Жизнь</a>
+                    <span class="work-meta">1883 · Роман</span>
+                  </div>
+                  <p class="work-summary">Трогательная история нормандской дворянки Жанны, её наивных надежд, разочарований и тихого смирения перед ходом времени.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-daudet">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альфонс Доде</h3>
+                  <p class="author-role">Певец Прованса и добродушной сатиры · <span class="tabular">1840–1897</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Писатель солнечного юга Франции, подаривший литературе поэтичные провансальские очерки и неунывающего хвастуна Тартарена.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-tartarin-de-tarascon">
+                  <div class="work-row">
+                    <span class="work-code">ФР-04.06</span>
+                    <a class="work-link" href="./works/daudet-tartaren.html">Необычайные приключения Тартарена из Тараскона</a>
+                    <span class="work-meta">1872 · Сатирическая повесть</span>
+                  </div>
+                  <p class="work-summary">Комическая одиссея провансальского мечтателя, отправившегося из тихого Тараскона охотиться на львов в Алжире.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fr-symbolism-poetry">
+        <div class="section-header">
+          <p class="section-kicker">Раздел V · 1857–1896 годы</p>
+          <h2 class="section-title">Символизм и поэзия нового времени</h2>
+          <p class="section-desc">Поэтический переворот второй половины XIX века: от городской меланхолии Бодлера к музыкальности Верлена и дерзкому ясновидению Рембо.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-baudelaire">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Шарль Бодлер</h3>
+                  <p class="author-role">Предтеча символизма и поэт современного города · <span class="tabular">1821–1867</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Поэт и эссеист, открывший красоту в тревогах большого города, противоречиях души и «соответствиях» звука, цвета и запаха.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-fleurs-du-mal">
+                  <div class="work-row">
+                    <span class="work-code">ФР-05.01</span>
+                    <a class="work-link" href="./works/baudelaire-cvety-zla.html">Цветы зла</a>
+                    <span class="work-meta">1857 · Книга стихов</span>
+                  </div>
+                  <p class="work-summary">Знаменитый сборник лирики, определивший всю европейскую поэзию модерна — от сонетов о красоте и сплине до «Альбатроса» и «Соответствий».</p>
+                </li>
+                <li class="work-item" id="work-spleen-de-paris">
+                  <div class="work-row">
+                    <span class="work-code">ФР-05.02</span>
+                    <a class="work-link" href="./works/baudelaire-parizhskiy-splin.html">Парижский сплин (Маленькие поэмы в прозе)</a>
+                    <span class="work-meta">1869 · Стихотворения в прозе</span>
+                  </div>
+                  <p class="work-summary">Цикл из пятидесяти миниатюр в прозе о парижских улицах, одиночестве, мечтателях и опьянении поэзией.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-verlaine">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Поль Верлен</h3>
+                  <p class="author-role">Мастер поэтической музыкальности · <span class="tabular">1844–1896</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из главных поэтов французского символизма, провозгласивший в стихе: «Прежде всего — музыка!».</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-romances-sans-paroles">
+                  <div class="work-row">
+                    <span class="work-code">ФР-05.03</span>
+                    <a class="work-link" href="./works/verlaine-romansy-bez-slov.html">Романсы без слов</a>
+                    <span class="work-meta">1874 · Сборник стихов</span>
+                  </div>
+                  <p class="work-summary">Лирическая книга полутонов, осеннего дождя, неясной грусти и завораживающей мелодики французского стиха.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-rimbaud">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Артюр Рембо</h3>
+                  <p class="author-role">Поэт-ясновидец и реформатор образности · <span class="tabular">1854–1891</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Юный гений французской поэзии, успевший до двадцати лет создать «Пьяный корабль», «Гласные» и поэзию в прозе.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-illuminations">
+                  <div class="work-row">
+                    <span class="work-code">ФР-05.04</span>
+                    <a class="work-link" href="./works/rimbaud-ozareniya.html">Озарения</a>
+                    <span class="work-meta">1886 · Поэмы в прозе</span>
+                  </div>
+                  <p class="work-summary">Калейдоскоп ярких видений, снов, фантастических городов и освобождённого поэтического языка.</p>
+                </li>
+                <li class="work-item" id="work-saison-en-enfer">
+                  <div class="work-row">
+                    <span class="work-code">ФР-05.05</span>
+                    <a class="work-link" href="./works/rimbaud-odno-leto-v-adu.html">Одно лето в аду</a>
+                    <span class="work-meta">1873 · Лирическая исповедь</span>
+                  </div>
+                  <p class="work-summary">Драматическое прощание Рембо с поэзией и подведение итогов своего духовного бунта.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="fr-twentieth-century">
+        <div class="section-header">
+          <p class="section-kicker">Раздел VI · 1913–1964 годы</p>
+          <h2 class="section-title">Модернизм, экзистенциализм и XX век</h2>
+          <p class="section-desc">Исследование памяти и времени у Пруста, поэтическая проза Сент-Экзюпери и философские романы о свободе, абсурде и выборе.</p>
+        </div>
+        <div class="authors-grid">
+          
+            <article class="author-card" id="author-proust">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Марсель Пруст</h3>
+                  <p class="author-role">Создатель романа памяти и нового психологизма · <span class="tabular">1871–1922</span></p>
+                </div>
+                <span class="author-count">1 произв.</span>
+              </header>
+              <p class="author-bio">Один из величайших романистов XX века, превративший непроизвольное воспоминание в архитектуру семитомной эпопеи.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-temps-perdu">
+                  <div class="work-row">
+                    <span class="work-code">ФР-06.01</span>
+                    <a class="work-link" href="./works/proust-v-poiskah-utrachennogo-vremeni.html">В поисках утраченного времени</a>
+                    <span class="work-meta">1913–1927 · Цикл из 7 романов</span>
+                  </div>
+                  <p class="work-summary">Эпопея от «По направлению к Свану» до «Обретённого времени» — история памяти, любви, искусства и уходящего общества Франции рубежа веков.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-saint-exupery">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Антуан де Сент-Экзюпери</h3>
+                  <p class="author-role">Писатель, лётчик и философ человеческого братства · <span class="tabular">1900–1944</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Автор мудрых притч и книг о небе, ответственности за тех, кого приручили, и красоте человеческой солидарности.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-petit-prince">
+                  <div class="work-row">
+                    <span class="work-code">ФР-06.02</span>
+                    <a class="work-link" href="./works/exupery-malenkiy-princ.html">Маленький принц</a>
+                    <span class="work-meta">1943 · Философская сказка</span>
+                  </div>
+                  <p class="work-summary">Бессмертная повесть-притча о встрече лётчика в Сахаре с мальчиком с астероида Б-612, о розе, Лисе и зоркости сердца.</p>
+                </li>
+                <li class="work-item" id="work-terre-des-hommes">
+                  <div class="work-row">
+                    <span class="work-code">ФР-06.03</span>
+                    <a class="work-link" href="./works/exupery-planeta-lyudey.html">Планета людей</a>
+                    <span class="work-meta">1939 · Лирическая проза</span>
+                  </div>
+                  <p class="work-summary">Размышления о лётной дружбе, преодолении пустыни и гор, и о том, что значит быть человеком на Земле.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-camus">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Альбер Камю</h3>
+                  <p class="author-role">Философ абсурда и бунта, лауреат Нобелевской премии · <span class="tabular">1913–1960</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Писатель и мыслитель, исследовавший достоинство человека перед лицом абсурда, равнодушия мира и исторических катастроф.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-letranger">
+                  <div class="work-row">
+                    <span class="work-code">ФР-06.04</span>
+                    <a class="work-link" href="./works/camus-postoronniy.html">Посторонний</a>
+                    <span class="work-meta">1942 · Повесть</span>
+                  </div>
+                  <p class="work-summary">Исповедь алжирского служащего Мерсо, который отказывается лгать о своих чувствах даже перед угрозой смертного приговора.</p>
+                </li>
+                <li class="work-item" id="work-la-peste">
+                  <div class="work-row">
+                    <span class="work-code">ФР-06.05</span>
+                    <a class="work-link" href="./works/camus-chuma.html">Чума</a>
+                    <span class="work-meta">1947 · Роман-притча</span>
+                  </div>
+                  <p class="work-summary">Хроника города Орана, охваченного эпидемией чумы, и мужественной работы доктора Риэ и его друзей против зла.</p>
+                </li>
+              </ul>
+            </article>
+
+            <article class="author-card" id="author-sartre">
+              <header class="author-header">
+                <div>
+                  <h3 class="author-name">Жан-Поль Сартр</h3>
+                  <p class="author-role">Философ экзистенциализма, романист и драматург · <span class="tabular">1905–1980</span></p>
+                </div>
+                <span class="author-count">2 произв.</span>
+              </header>
+              <p class="author-bio">Мыслитель и писатель, утвердивший тему личной свободы и ответственности человека за выбор собственной судьбы.</p>
+              <ul class="works-list">
+                <li class="work-item" id="work-la-nausee">
+                  <div class="work-row">
+                    <span class="work-code">ФР-06.06</span>
+                    <a class="work-link" href="./works/sartre-toshnota.html">Тошнота</a>
+                    <span class="work-meta">1938 · Философский роман</span>
+                  </div>
+                  <p class="work-summary">Дневник историка Антуана Рокантена, переживающего острое ощущение случайности и беспричинности окружающего мира.</p>
+                </li>
+                <li class="work-item" id="work-les-mots">
+                  <div class="work-row">
+                    <span class="work-code">ФР-06.07</span>
+                    <a class="work-link" href="./works/sartre-slova.html">Слова</a>
+                    <span class="work-meta">1964 · Автобиографическая повесть</span>
+                  </div>
+                  <p class="work-summary">Ироничная и проницательная история детства, проведённого среди книг в библиотеке деда, и становления призвания писателя.</p>
+                </li>
+              </ul>
+            </article>
+        </div>
+      </section>
+  </main>
+
+  <footer class="container site-footer">
+    <span>Untold Archive — Собрание французской литературы</span>
+    <span><a href="https://untoldarchive.com/">&copy; UntoldArchive.com</a></span>
+  </footer>
+</body>
+</html>
